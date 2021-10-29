@@ -6,3 +6,5 @@ Desarrollo en Java SE y MySQL para el curso de Programación Orientada a Objetos
 * Estructuras repetitivas
 * Arreglos Unidimensionales y Bidimensionales
 * Arrays
+* Pilares POO
+* JDBC con MySQL
