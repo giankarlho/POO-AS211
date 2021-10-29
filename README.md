@@ -1,10 +1,5 @@
 ## Promoción AS211 IES Valle Grande
-Desarrollo en Java SE y MySQL para el curso de Programación Orientada a Objetos 
+Rama JDBC con MySQL y Java SE
 
-* Algoritmos
-* Estructuras de control
-* Estructuras repetitivas
-* Arreglos Unidimensionales y Bidimensionales
-* Arrays
 * Pilares POO
-* JDBC con MySQL
+* JDBC con MySQL usando localhost: xampp server, wampserver, etc.
