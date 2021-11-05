@@ -1,50 +1,80 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package vistas;
 
+/**
+ *
+ * @author Joaquin
+ */
 public class Principal extends javax.swing.JFrame {
 
-
+    /**
+     * Creates new form Principal
+     */
     public Principal() {
         initComponents();
     }
+
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jmiCalculadora = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
+        jLabel1 = new javax.swing.JLabel();
+        jMenuBar1 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
+        jmiRegPersonal = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
+        jmiRegProducto = new javax.swing.JMenu();
         jMenuItem4 = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
+        jMenuItem6 = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
+
+        jMenu1.setText("jMenu1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jMenu1.setText("Algoritmos");
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/fondo_transformers.jpg"))); // NOI18N
 
-        jmiCalculadora.setText("Calculadora");
-        jmiCalculadora.addActionListener(new java.awt.event.ActionListener() {
+        jMenu2.setText("Personal");
+
+        jmiRegPersonal.setText("Registro");
+        jmiRegPersonal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jmiCalculadoraActionPerformed(evt);
+                jmiRegPersonalActionPerformed(evt);
             }
         });
-        jMenu1.add(jmiCalculadora);
+        jMenu2.add(jmiRegPersonal);
 
-        jMenuItem2.setText("Jugando");
-        jMenu1.add(jMenuItem2);
+        jMenuItem2.setText("Listado");
+        jMenu2.add(jMenuItem2);
 
-        jMenuBar1.add(jMenu1);
-
-        jMenu2.setText("Probando");
-
-        jMenuItem3.setText("jMenuItem3");
+        jMenuItem3.setText("Reportes");
         jMenu2.add(jMenuItem3);
 
-        jMenuItem4.setText("jMenuItem4");
-        jMenu2.add(jMenuItem4);
-
         jMenuBar1.add(jMenu2);
+
+        jmiRegProducto.setText("Productos");
+
+        jMenuItem4.setText("Registro");
+        jmiRegProducto.add(jMenuItem4);
+
+        jMenuItem5.setText("Listado");
+        jmiRegProducto.add(jMenuItem5);
+
+        jMenuItem6.setText("Reportes");
+        jmiRegProducto.add(jMenuItem6);
+
+        jMenuItem1.setText("jMenuItem1");
+        jmiRegProducto.add(jMenuItem1);
+
+        jMenuBar1.add(jmiRegProducto);
 
         setJMenuBar(jMenuBar1);
 
@@ -52,22 +82,26 @@ public class Principal extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1104, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jLabel1)
+                .addGap(0, 534, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 785, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jLabel1)
+                .addGap(0, 395, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jmiCalculadoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiCalculadoraActionPerformed
-        Calculadora calculadora = new Calculadora();
-        calculadora.show();
-    }//GEN-LAST:event_jmiCalculadoraActionPerformed
+    private void jmiRegPersonalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiRegPersonalActionPerformed
+        PersonalReg regPersonal = new PersonalReg();
+        regPersonal.show();
+    }//GEN-LAST:event_jmiRegPersonalActionPerformed
 
-
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -101,12 +135,17 @@ public class Principal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenuItem jmiCalculadora;
+    private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JMenuItem jmiRegPersonal;
+    private javax.swing.JMenu jmiRegProducto;
     // End of variables declaration//GEN-END:variables
 }
