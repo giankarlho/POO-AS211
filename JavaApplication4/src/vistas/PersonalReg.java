@@ -5,6 +5,8 @@ import controlador.PersonalC;
 public class PersonalReg extends javax.swing.JFrame {
 
     public static String sexo;
+    public static int codigo;
+    
     PersonalC controlador;
 
     public PersonalReg() {

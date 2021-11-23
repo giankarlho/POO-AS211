@@ -37,4 +37,21 @@ public class PersonalC {
         }
     }
     
+    public void modificar() throws Exception{
+        try {
+            personal.setId(PersonalReg.codigo);
+            actualizarModelo();
+            dao.modificar(personal);
+        } catch (Exception e) {
+            System.out.println("Error en modificarC " + e.getMessage());
+        }
+    }
+    
+    public void eliminar() throws Exception{
+        try {             
+            dao.eliminar(PersonalReg.codigo);
+        } catch (Exception e) {
+            System.out.println("Error en eliminarC " + e.getMessage());
+        }
+    }
 }
