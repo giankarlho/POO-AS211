@@ -35,6 +35,14 @@ public class Personal {
         this.apellidos = apellidos;
     }
 
+    public String getDni() {
+        return dni;
+    }
+
+    public void setDni(String dni) {
+        this.dni = dni;
+    }       
+
     public String getSexo() {
         return sexo;
     }
@@ -42,16 +50,6 @@ public class Personal {
     public void setSexo(String sexo) {
         this.sexo = sexo;
     }
-
-    public String getDni() {
-        return dni;
-    }
-
-    public void setDni(String dni) {
-        this.dni = dni;
-    }
-
-    
 
 
 }

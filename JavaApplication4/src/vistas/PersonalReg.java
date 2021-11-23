@@ -3,7 +3,10 @@ package vistas;
 import controlador.PersonalC;
 
 public class PersonalReg extends javax.swing.JFrame {
-    
+
+    public static String sexo;
+    PersonalC controlador;
+
     public PersonalReg() {
         initComponents();
         grupoSexo.add(jrdMasculino);
@@ -11,8 +14,8 @@ public class PersonalReg extends javax.swing.JFrame {
         grupoFiltro.add(jrdNombre);
         grupoFiltro.add(jrdDni);
         grupoFiltro.add(jrdApellido);
+        controlador = new PersonalC();
     }
-
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -37,7 +40,7 @@ public class PersonalReg extends javax.swing.JFrame {
         jbtnNuevo = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        jbtnGuardar = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -82,6 +85,11 @@ public class PersonalReg extends javax.swing.JFrame {
         jrdFemenino.setBackground(new java.awt.Color(204, 255, 255));
         jrdFemenino.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jrdFemenino.setText("Femenino");
+        jrdFemenino.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jrdFemeninoActionPerformed(evt);
+            }
+        });
         jPanel1.add(jrdFemenino, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 120, -1, -1));
 
         jtxtDni.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -129,12 +137,17 @@ public class PersonalReg extends javax.swing.JFrame {
         jButton5.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
         jButton5.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
 
-        jButton6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/guardar.png"))); // NOI18N
-        jButton6.setText("Guardar");
-        jButton6.setBorderPainted(false);
-        jButton6.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
-        jButton6.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        jbtnGuardar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jbtnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/guardar.png"))); // NOI18N
+        jbtnGuardar.setText("Guardar");
+        jbtnGuardar.setBorderPainted(false);
+        jbtnGuardar.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
+        jbtnGuardar.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        jbtnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnGuardarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -146,11 +159,11 @@ public class PersonalReg extends javax.swing.JFrame {
                     .addComponent(jbtnNuevo)
                     .addComponent(jButton4)
                     .addComponent(jButton5)
-                    .addComponent(jButton6))
+                    .addComponent(jbtnGuardar))
                 .addContainerGap(18, Short.MAX_VALUE))
         );
 
-        jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton4, jButton5, jButton6, jbtnNuevo});
+        jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton4, jButton5, jbtnGuardar, jbtnNuevo});
 
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -158,7 +171,7 @@ public class PersonalReg extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jbtnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jbtnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -296,7 +309,9 @@ public class PersonalReg extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jrdMasculinoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrdMasculinoActionPerformed
-        // TODO add your handling code here:
+        if (jrdMasculino.isSelected() == true) {
+            sexo = "M";
+        }
     }//GEN-LAST:event_jrdMasculinoActionPerformed
 
     private void jrdApellidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrdApellidoActionPerformed
@@ -311,7 +326,7 @@ public class PersonalReg extends javax.swing.JFrame {
         try {
             PersonalC.limpiarComp();
         } catch (Exception e) {
-            
+
         }
     }//GEN-LAST:event_jbtnNuevoActionPerformed
 
@@ -319,9 +334,20 @@ public class PersonalReg extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnCerrarActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
+    private void jbtnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnGuardarActionPerformed
+        try {
+            controlador.registrar();
+        } catch (Exception e) {
+            System.out.println("Error en jbtnGuardar: " + e.getMessage());
+        }
+    }//GEN-LAST:event_jbtnGuardarActionPerformed
+
+    private void jrdFemeninoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrdFemeninoActionPerformed
+        if (jrdFemenino.isSelected() == true) {
+            sexo = "F";
+        }
+    }//GEN-LAST:event_jrdFemeninoActionPerformed
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -358,11 +384,10 @@ public class PersonalReg extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCerrar;
     private javax.swing.ButtonGroup grupoFiltro;
-    private javax.swing.ButtonGroup grupoSexo;
+    public static javax.swing.ButtonGroup grupoSexo;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -376,6 +401,7 @@ public class PersonalReg extends javax.swing.JFrame {
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
+    private javax.swing.JButton jbtnGuardar;
     private javax.swing.JButton jbtnNuevo;
     private javax.swing.JRadioButton jrdApellido;
     private javax.swing.JRadioButton jrdDni;
