@@ -45,10 +45,9 @@ public class PersonalD extends Conexion implements ICRUD<Personal> {
 
     @Override
     public void eliminar(int codigo) throws Exception {
-        String sql = "delete personal where id_pers=?";
+        String sql = "delete from personal where id_pers=" + codigo;
         try {
-            PreparedStatement ps = this.conectar().prepareStatement(sql);            
-            ps.setInt(1,codigo);
+            PreparedStatement ps = this.conectar().prepareStatement(sql);                        
             ps.executeUpdate();
             ps.close();
             JOptionPane.showMessageDialog(null,"Personal eliminado","Eliminación",JOptionPane.WARNING_MESSAGE);

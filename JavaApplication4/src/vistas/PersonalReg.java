@@ -1,12 +1,17 @@
 package vistas;
 
 import controlador.PersonalC;
+import dao.Conexion;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 public class PersonalReg extends javax.swing.JFrame {
 
+    DefaultTableModel modeloTabla;
     public static String sexo;
     public static int codigo;
-    
     PersonalC controlador;
 
     public PersonalReg() {
@@ -17,6 +22,29 @@ public class PersonalReg extends javax.swing.JFrame {
         grupoFiltro.add(jrdDni);
         grupoFiltro.add(jrdApellido);
         controlador = new PersonalC();
+        cargarValoresTabla();
+    }
+
+    public void cargarValoresTabla() {
+        String columnas[] = new String[]{"Código", "Nombre", "Apellido", "Sexo", "DNI"};
+        modeloTabla = new DefaultTableModel(null, columnas);
+        String sql = "Select * from personal";
+        try {
+            PreparedStatement ps = Conexion.conectar().prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            Object datos[] = new Object[5]; // cantidad de columnas
+            while (rs.next()) {
+                for (int i = 0; i < 5; i++) {
+                    datos[i] = rs.getObject(i + 1);
+                }
+                modeloTabla.addRow(datos);
+                jtblPersonal.setModel(modeloTabla);
+            }
+            rs.close();
+            ps.close();
+        } catch (Exception e) {
+            System.out.println("Error en setFilas " + e.getMessage());
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -39,19 +67,20 @@ public class PersonalReg extends javax.swing.JFrame {
         jTextField4 = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
-        jbtnNuevo = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        jbtnReporte = new javax.swing.JButton();
+        jbtnEliminar = new javax.swing.JButton();
         jbtnGuardar = new javax.swing.JButton();
+        jbtnModificar = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jtblPersonal = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         jTextField5 = new javax.swing.JTextField();
         jrdNombre = new javax.swing.JRadioButton();
         jrdApellido = new javax.swing.JRadioButton();
         jrdDni = new javax.swing.JRadioButton();
         btnCerrar = new javax.swing.JButton();
+        jbtnNuevo = new javax.swing.JButton();
 
         jButton1.setText("jButton1");
 
@@ -113,31 +142,24 @@ public class PersonalReg extends javax.swing.JFrame {
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 204));
 
-        jbtnNuevo.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jbtnNuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/nuevo.png"))); // NOI18N
-        jbtnNuevo.setText("Nuevo");
-        jbtnNuevo.setBorderPainted(false);
-        jbtnNuevo.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
-        jbtnNuevo.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        jbtnNuevo.addActionListener(new java.awt.event.ActionListener() {
+        jbtnReporte.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jbtnReporte.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/reportar.png"))); // NOI18N
+        jbtnReporte.setText("Reportes");
+        jbtnReporte.setBorderPainted(false);
+        jbtnReporte.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
+        jbtnReporte.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+
+        jbtnEliminar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jbtnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/borrar.png"))); // NOI18N
+        jbtnEliminar.setText("Eliminar");
+        jbtnEliminar.setBorderPainted(false);
+        jbtnEliminar.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
+        jbtnEliminar.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        jbtnEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtnNuevoActionPerformed(evt);
+                jbtnEliminarActionPerformed(evt);
             }
         });
-
-        jButton4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/reportar.png"))); // NOI18N
-        jButton4.setText("Reportes");
-        jButton4.setBorderPainted(false);
-        jButton4.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
-        jButton4.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-
-        jButton5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/borrar.png"))); // NOI18N
-        jButton5.setText("Eliminar");
-        jButton5.setBorderPainted(false);
-        jButton5.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
-        jButton5.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
 
         jbtnGuardar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jbtnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/guardar.png"))); // NOI18N
@@ -151,6 +173,18 @@ public class PersonalReg extends javax.swing.JFrame {
             }
         });
 
+        jbtnModificar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jbtnModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/guardar.png"))); // NOI18N
+        jbtnModificar.setText("Modificar");
+        jbtnModificar.setBorderPainted(false);
+        jbtnModificar.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
+        jbtnModificar.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        jbtnModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnModificarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -158,34 +192,34 @@ public class PersonalReg extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jbtnNuevo)
-                    .addComponent(jButton4)
-                    .addComponent(jButton5)
-                    .addComponent(jbtnGuardar))
+                    .addComponent(jbtnReporte)
+                    .addComponent(jbtnEliminar)
+                    .addComponent(jbtnGuardar)
+                    .addComponent(jbtnModificar))
                 .addContainerGap(18, Short.MAX_VALUE))
         );
 
-        jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton4, jButton5, jbtnGuardar, jbtnNuevo});
+        jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jbtnEliminar, jbtnGuardar, jbtnReporte});
 
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jbtnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jbtnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jbtnModificar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jbtnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jbtnReporte, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18))
         );
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         jLabel5.setText("Registro de Personal");
 
-        jTable1.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jtblPersonal.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        jtblPersonal.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -196,7 +230,12 @@ public class PersonalReg extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jtblPersonal.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jtblPersonalMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jtblPersonal);
 
         jPanel2.setBackground(new java.awt.Color(204, 255, 204));
 
@@ -233,8 +272,8 @@ public class PersonalReg extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jrdDni)
                 .addGap(18, 18, 18)
-                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -257,6 +296,18 @@ public class PersonalReg extends javax.swing.JFrame {
             }
         });
 
+        jbtnNuevo.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jbtnNuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/nuevo.png"))); // NOI18N
+        jbtnNuevo.setText("Nuevo");
+        jbtnNuevo.setBorderPainted(false);
+        jbtnNuevo.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
+        jbtnNuevo.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        jbtnNuevo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnNuevoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -268,7 +319,10 @@ public class PersonalReg extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(10, 10, 10)
                                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 491, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jbtnNuevo)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(3, 3, 3))
@@ -301,7 +355,9 @@ public class PersonalReg extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jbtnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(27, 27, 27)))
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(22, Short.MAX_VALUE))
@@ -317,11 +373,11 @@ public class PersonalReg extends javax.swing.JFrame {
     }//GEN-LAST:event_jrdMasculinoActionPerformed
 
     private void jrdApellidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrdApellidoActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_jrdApellidoActionPerformed
 
     private void jrdDniActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrdDniActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_jrdDniActionPerformed
 
     private void jbtnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnNuevoActionPerformed
@@ -339,6 +395,7 @@ public class PersonalReg extends javax.swing.JFrame {
     private void jbtnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnGuardarActionPerformed
         try {
             controlador.registrar();
+            cargarValoresTabla();
         } catch (Exception e) {
             System.out.println("Error en jbtnGuardar: " + e.getMessage());
         }
@@ -349,6 +406,60 @@ public class PersonalReg extends javax.swing.JFrame {
             sexo = "F";
         }
     }//GEN-LAST:event_jrdFemeninoActionPerformed
+
+    private void jbtnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnEliminarActionPerformed
+        try {            
+            int fila = jtblPersonal.getSelectedRow();
+            if (fila >= 0) {
+                int opcion = JOptionPane.showConfirmDialog(null, "¿Deseas eliminar el registro?", "Eliminación del Registro", JOptionPane.YES_NO_OPTION);
+                if (opcion == JOptionPane.YES_OPTION) {
+                    codigo = Integer.parseInt(jtblPersonal.getValueAt(fila, 0).toString());
+                    controlador.eliminar();
+                    cargarValoresTabla();
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Error en jbtnEliminar " + e.getMessage());
+        }
+    }//GEN-LAST:event_jbtnEliminarActionPerformed
+
+    private void jbtnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnModificarActionPerformed
+        try {            
+            int fila = jtblPersonal.getSelectedRow();
+            if (fila >= 0) {
+                int opcion = JOptionPane.showConfirmDialog(null, "¿Deseas modificar el registro?", "Actualización del Registro", JOptionPane.YES_NO_OPTION);
+                if (opcion == JOptionPane.YES_OPTION) {
+                    codigo = Integer.parseInt(jtblPersonal.getValueAt(fila, 0).toString());
+                    controlador.modificar();
+                    cargarValoresTabla();
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Error en jbtnModificar " + e.getMessage());
+        }        
+    }//GEN-LAST:event_jbtnModificarActionPerformed
+
+    private void jtblPersonalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtblPersonalMouseClicked
+        try {
+            int fila = jtblPersonal.getSelectedRow();
+            if (fila >= 0) {
+                codigo = Integer.parseInt(jtblPersonal.getValueAt(fila, 0).toString());
+                jtxtNombre.setText(jtblPersonal.getValueAt(fila, 1).toString());
+                jtxtApellido.setText(jtblPersonal.getValueAt(fila, 2).toString());
+                sexo = jtblPersonal.getValueAt(fila, 3).toString();
+                if (sexo.equals("M")) {
+                    jrdMasculino.setSelected(true);
+                    jrdFemenino.setSelected(false);
+                } else {
+                    jrdFemenino.setSelected(true);
+                    jrdMasculino.setSelected(false);
+                }
+                jtxtDni.setText(jtblPersonal.getValueAt(fila, 4).toString());
+            }
+        } catch (Exception e) {
+        }
+
+    }//GEN-LAST:event_jtblPersonalMouseClicked
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -388,8 +499,6 @@ public class PersonalReg extends javax.swing.JFrame {
     private javax.swing.ButtonGroup grupoFiltro;
     public static javax.swing.ButtonGroup grupoSexo;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -400,16 +509,19 @@ public class PersonalReg extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
+    private javax.swing.JButton jbtnEliminar;
     private javax.swing.JButton jbtnGuardar;
+    private javax.swing.JButton jbtnModificar;
     private javax.swing.JButton jbtnNuevo;
+    private javax.swing.JButton jbtnReporte;
     private javax.swing.JRadioButton jrdApellido;
     private javax.swing.JRadioButton jrdDni;
     public static javax.swing.JRadioButton jrdFemenino;
     public static javax.swing.JRadioButton jrdMasculino;
     private javax.swing.JRadioButton jrdNombre;
+    private javax.swing.JTable jtblPersonal;
     public static javax.swing.JTextField jtxtApellido;
     public static javax.swing.JTextField jtxtDni;
     public static javax.swing.JTextField jtxtNombre;
