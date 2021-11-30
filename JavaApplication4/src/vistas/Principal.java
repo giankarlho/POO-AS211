@@ -5,10 +5,7 @@
  */
 package vistas;
 
-/**
- *
- * @author Joaquin
- */
+
 public class Principal extends javax.swing.JFrame {
 
     /**

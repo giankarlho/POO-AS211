@@ -1,15 +1,16 @@
 package vistas;
 
 import controlador.PersonalC;
-import dao.Conexion;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class PersonalReg extends javax.swing.JFrame {
 
-    DefaultTableModel modeloTabla;
+    public static DefaultTableModel modeloTabla;
+    public static int tipo = 0;
+    public static String dato ="";
     public static String sexo;
     public static int codigo;
     PersonalC controlador;
@@ -26,25 +27,34 @@ public class PersonalReg extends javax.swing.JFrame {
     }
 
     public void cargarValoresTabla() {
-        String columnas[] = new String[]{"Código", "Nombre", "Apellido", "Sexo", "DNI"};
-        modeloTabla = new DefaultTableModel(null, columnas);
-        String sql = "Select * from personal";
         try {
-            PreparedStatement ps = Conexion.conectar().prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
-            Object datos[] = new Object[5]; // cantidad de columnas
-            while (rs.next()) {
-                for (int i = 0; i < 5; i++) {
-                    datos[i] = rs.getObject(i + 1);
-                }
-                modeloTabla.addRow(datos);
-                jtblPersonal.setModel(modeloTabla);
-            }
-            rs.close();
-            ps.close();
+            String columnas[] = new String[]{"Código", "Nombre", "Apellido", "Sexo", "DNI"};
+            modeloTabla = new DefaultTableModel(null, columnas);
+            controlador.listar();
+            jtblPersonal.setModel(modeloTabla);
         } catch (Exception e) {
-            System.out.println("Error en setFilas " + e.getMessage());
+            System.out.println("Error en cargarValoresTabla " + e.getMessage());
         }
+
+//        String columnas[] = new String[]{"Código", "Nombre", "Apellido", "Sexo", "DNI"};
+//        modeloTabla = new DefaultTableModel(null, columnas);
+//        String sql = "Select * from personal";
+//        try {
+//            PreparedStatement ps = Conexion.conectar().prepareStatement(sql);
+//            ResultSet rs = ps.executeQuery();
+//            Object datos[] = new Object[5]; // cantidad de columnas
+//            while (rs.next()) {
+//                for (int i = 0; i < 5; i++) {
+//                    datos[i] = rs.getObject(i + 1);
+//                }
+//                modeloTabla.addRow(datos);
+//                jtblPersonal.setModel(modeloTabla);
+//            }
+//            rs.close();
+//            ps.close();
+//        } catch (Exception e) {
+//            System.out.println("Error en setFilas " + e.getMessage());
+//        }
     }
 
     @SuppressWarnings("unchecked")
@@ -75,10 +85,11 @@ public class PersonalReg extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jtblPersonal = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
-        jTextField5 = new javax.swing.JTextField();
+        jtxtBuscar = new javax.swing.JTextField();
         jrdNombre = new javax.swing.JRadioButton();
         jrdApellido = new javax.swing.JRadioButton();
         jrdDni = new javax.swing.JRadioButton();
+        jchkTodos = new javax.swing.JCheckBox();
         btnCerrar = new javax.swing.JButton();
         jbtnNuevo = new javax.swing.JButton();
 
@@ -148,6 +159,11 @@ public class PersonalReg extends javax.swing.JFrame {
         jbtnReporte.setBorderPainted(false);
         jbtnReporte.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
         jbtnReporte.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        jbtnReporte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnReporteActionPerformed(evt);
+            }
+        });
 
         jbtnEliminar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jbtnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/borrar.png"))); // NOI18N
@@ -239,10 +255,20 @@ public class PersonalReg extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(204, 255, 204));
 
-        jTextField5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jtxtBuscar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jtxtBuscar.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                jtxtBuscarCaretUpdate(evt);
+            }
+        });
 
         jrdNombre.setBackground(new java.awt.Color(204, 255, 204));
         jrdNombre.setText("Nombre");
+        jrdNombre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jrdNombreActionPerformed(evt);
+            }
+        });
 
         jrdApellido.setBackground(new java.awt.Color(204, 255, 204));
         jrdApellido.setText("Apellido");
@@ -260,6 +286,14 @@ public class PersonalReg extends javax.swing.JFrame {
             }
         });
 
+        jchkTodos.setBackground(new java.awt.Color(204, 255, 204));
+        jchkTodos.setText("Todos");
+        jchkTodos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jchkTodosActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -267,24 +301,27 @@ public class PersonalReg extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jrdNombre)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jrdApellido)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jrdDni)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jtxtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addComponent(jchkTodos)
+                .addContainerGap(40, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jrdNombre, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jrdApellido, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jrdDni, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jrdApellido)
+                    .addComponent(jrdNombre)
+                    .addComponent(jrdDni)
+                    .addComponent(jtxtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jchkTodos))
+                .addContainerGap(11, Short.MAX_VALUE))
         );
 
         btnCerrar.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
@@ -321,9 +358,9 @@ public class PersonalReg extends javax.swing.JFrame {
                                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 491, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGap(18, 18, 18)
                                 .addComponent(jbtnNuevo)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(30, 30, 30)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(3, 3, 3))
                     .addGroup(layout.createSequentialGroup()
@@ -373,11 +410,13 @@ public class PersonalReg extends javax.swing.JFrame {
     }//GEN-LAST:event_jrdMasculinoActionPerformed
 
     private void jrdApellidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrdApellidoActionPerformed
-
+        tipo = 2;        
+        buscar();
     }//GEN-LAST:event_jrdApellidoActionPerformed
 
     private void jrdDniActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrdDniActionPerformed
-
+        tipo = 3;        
+        buscar();
     }//GEN-LAST:event_jrdDniActionPerformed
 
     private void jbtnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnNuevoActionPerformed
@@ -396,6 +435,7 @@ public class PersonalReg extends javax.swing.JFrame {
         try {
             controlador.registrar();
             cargarValoresTabla();
+            PersonalC.limpiarComp();
         } catch (Exception e) {
             System.out.println("Error en jbtnGuardar: " + e.getMessage());
         }
@@ -408,7 +448,7 @@ public class PersonalReg extends javax.swing.JFrame {
     }//GEN-LAST:event_jrdFemeninoActionPerformed
 
     private void jbtnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnEliminarActionPerformed
-        try {            
+        try {
             int fila = jtblPersonal.getSelectedRow();
             if (fila >= 0) {
                 int opcion = JOptionPane.showConfirmDialog(null, "¿Deseas eliminar el registro?", "Eliminación del Registro", JOptionPane.YES_NO_OPTION);
@@ -424,7 +464,7 @@ public class PersonalReg extends javax.swing.JFrame {
     }//GEN-LAST:event_jbtnEliminarActionPerformed
 
     private void jbtnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnModificarActionPerformed
-        try {            
+        try {
             int fila = jtblPersonal.getSelectedRow();
             if (fila >= 0) {
                 int opcion = JOptionPane.showConfirmDialog(null, "¿Deseas modificar el registro?", "Actualización del Registro", JOptionPane.YES_NO_OPTION);
@@ -436,7 +476,7 @@ public class PersonalReg extends javax.swing.JFrame {
             }
         } catch (Exception e) {
             System.out.println("Error en jbtnModificar " + e.getMessage());
-        }        
+        }
     }//GEN-LAST:event_jbtnModificarActionPerformed
 
     private void jtblPersonalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtblPersonalMouseClicked
@@ -457,9 +497,47 @@ public class PersonalReg extends javax.swing.JFrame {
                 jtxtDni.setText(jtblPersonal.getValueAt(fila, 4).toString());
             }
         } catch (Exception e) {
+            System.out.println("Error en jtblPersonal " + e.getMessage());
         }
-
     }//GEN-LAST:event_jtblPersonalMouseClicked
+
+    private void jrdNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrdNombreActionPerformed
+        tipo = 1;
+        buscar();
+    }//GEN-LAST:event_jrdNombreActionPerformed
+
+    private void buscar(){
+        jtxtBuscar.requestFocus();
+        jchkTodos.setSelected(false);
+        jtxtBuscar.setText("");
+    }
+    private void jtxtBuscarCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_jtxtBuscarCaretUpdate
+        System.out.println("Tamaño de Texto " + jtxtBuscar.getText().length());
+        try {
+            dato = jtxtBuscar.getText();
+            cargarValoresTabla();
+        } catch (Exception e) {
+            
+        }
+    }//GEN-LAST:event_jtxtBuscarCaretUpdate
+
+    private void jchkTodosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jchkTodosActionPerformed
+        try {
+            if (jchkTodos.isSelected()== true){
+                tipo = 0;
+                cargarValoresTabla();
+                jtxtBuscar.setText("");
+                dato ="";
+                grupoFiltro.clearSelection();
+            }
+        } catch (Exception e) {
+            
+        }
+    }//GEN-LAST:event_jchkTodosActionPerformed
+
+    private void jbtnReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnReporteActionPerformed
+
+    }//GEN-LAST:event_jbtnReporteActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -489,7 +567,11 @@ public class PersonalReg extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new PersonalReg().setVisible(true);
+                try {
+                    new PersonalReg().setVisible(true);
+                } catch (Exception ex) {
+                    Logger.getLogger(PersonalReg.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
@@ -510,12 +592,12 @@ public class PersonalReg extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
     private javax.swing.JButton jbtnEliminar;
     private javax.swing.JButton jbtnGuardar;
     private javax.swing.JButton jbtnModificar;
     private javax.swing.JButton jbtnNuevo;
     private javax.swing.JButton jbtnReporte;
+    private javax.swing.JCheckBox jchkTodos;
     private javax.swing.JRadioButton jrdApellido;
     private javax.swing.JRadioButton jrdDni;
     public static javax.swing.JRadioButton jrdFemenino;
@@ -523,6 +605,7 @@ public class PersonalReg extends javax.swing.JFrame {
     private javax.swing.JRadioButton jrdNombre;
     private javax.swing.JTable jtblPersonal;
     public static javax.swing.JTextField jtxtApellido;
+    private javax.swing.JTextField jtxtBuscar;
     public static javax.swing.JTextField jtxtDni;
     public static javax.swing.JTextField jtxtNombre;
     // End of variables declaration//GEN-END:variables

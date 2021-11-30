@@ -8,10 +8,12 @@ public class PersonalC {
 
     Personal personal;
     PersonalD dao;
+//    PersonalReg vista;
 
     public PersonalC() {
         dao = new PersonalD();
         personal = new Personal();
+//        vista = new PersonalReg();
     }
 
     public static void limpiarComp() {
@@ -48,6 +50,14 @@ public class PersonalC {
         }
     }
 
+    public void listar() throws Exception{
+        try {
+//            dao.verDatos2(PersonalReg.modeloTabla);
+            dao.verDatos(PersonalReg.modeloTabla,PersonalReg.dato,PersonalReg.tipo);
+        } catch (Exception e) {
+            System.out.println("Error en listar " + e.getMessage());
+        }
+    }
     public void actualizarModelo() throws Exception {
         personal.setNombre(PersonalReg.jtxtNombre.getText());
         personal.setApellidos(PersonalReg.jtxtApellido.getText());
