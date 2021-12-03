@@ -92,7 +92,7 @@ public class PersonalD extends Conexion implements ICRUD<Personal> {
         } catch (Exception e) {
             System.out.println("Error en setFilas " + e.getMessage());
         }
-    }
+    }    
     
-
+    
 }

@@ -5,6 +5,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.view.JasperViewer;
+import servicios.ReportGenerator;
 
 public class PersonalReg extends javax.swing.JFrame {
 
@@ -135,6 +139,11 @@ public class PersonalReg extends javax.swing.JFrame {
         jPanel1.add(jrdFemenino, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 120, -1, -1));
 
         jtxtDni.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jtxtDni.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jtxtDniKeyTyped(evt);
+            }
+        });
         jPanel1.add(jtxtDni, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 80, 340, -1));
 
         jtxtApellido.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -536,8 +545,23 @@ public class PersonalReg extends javax.swing.JFrame {
     }//GEN-LAST:event_jchkTodosActionPerformed
 
     private void jbtnReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnReporteActionPerformed
-
+        try {
+            JasperPrint reporte = ReportGenerator.generarReporteSimplePersonal();
+//            JasperExportManager.exportReportToPdfFile(reporte,"Listado_Personal.pdf");
+            JasperViewer viewer = new JasperViewer(reporte, false);
+            viewer.setVisible(true);
+        } catch (Exception e) {
+            System.out.println("Error en jbtnReporte " + e.getMessage());
+        }
     }//GEN-LAST:event_jbtnReporteActionPerformed
+
+    private void jtxtDniKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtxtDniKeyTyped
+        char car = evt.getKeyChar();
+        if ( car <'0' || car > '9'){
+            evt.consume();
+        }
+//        System.out.println("Imprimo " + car);        
+    }//GEN-LAST:event_jtxtDniKeyTyped
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
